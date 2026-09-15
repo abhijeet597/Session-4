@@ -10,6 +10,7 @@
 
   <form id="add-habit-form">
     <input type="text" id="name" placeholder="Habit name" required>
+
     <select id="category" required>
       <option value="Health">Health</option>
       <option value="Productivity">Productivity</option>
@@ -17,31 +18,63 @@
       <option value="Learning">Learning</option>
       <option value="Other">Other</option>
     </select>
+
     <select id="frequency" required>
       <option value="Daily">Daily</option>
       <option value="Weekly">Weekly</option>
     </select>
+
     <button type="submit">Add Habit</button>
   </form>
 
   <div id="sort-controls">
     <label for="sort-field">Sort by</label>
+
     <select id="sort-field">
       <option value="name">Name</option>
       <option value="category">Category</option>
       <option value="frequency">Frequency</option>
       <option value="checkins">Check-ins</option>
     </select>
+
     <select id="sort-dir">
       <option value="asc">Ascending</option>
       <option value="desc">Descending</option>
     </select>
   </div>
 
+  <div id="filter-controls">
+    <label for="filter-category">Filter by category</label>
+
+    <select id="filter-category">
+      <option value="">All Categories</option>
+      <option value="Health">Health</option>
+      <option value="Productivity">Productivity</option>
+      <option value="Mindfulness">Mindfulness</option>
+      <option value="Learning">Learning</option>
+      <option value="Other">Other</option>
+    </select>
+
+    <label for="filter-date-from">Created from</label>
+    <input type="date" id="filter-date-from">
+
+    <label for="filter-date-to">Created to</label>
+    <input type="date" id="filter-date-to">
+
+    <button type="button" id="clear-filters">Clear Filters</button>
+  </div>
+
   <table id="habit-table">
     <thead>
-      <tr><th>Habit</th><th>Category</th><th>Frequency</th><th id="sort-checkins-header" class="sortable">Check-ins</th><th>Actions</th></tr>
+      <tr>
+        <th>Habit</th>
+        <th>Category</th>
+        <th>Frequency</th>
+        <th id="sort-checkins-header" class="sortable">Check-ins</th>
+        <th>Actions</th>
+      </tr>
     </thead>
+
     <tbody id="habit-list-body"></tbody>
   </table>
 

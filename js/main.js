@@ -15,6 +15,14 @@ function loadSort() {
   return { ...DEFAULT_SORT };
 }
 
+function applyFilters() {
+  const category = document.getElementById('filter-category').value;
+  const dateFrom = document.getElementById('filter-date-from').value;
+  const dateTo = document.getElementById('filter-date-to').value;
+  const filtered = filterHabits(getHabits(), category, dateFrom, dateTo);
+  renderHabitList(filtered);
+}
+
 function renderSorted() {
   const field = document.getElementById('sort-field').value;
   const dir = document.getElementById('sort-dir').value;
@@ -57,6 +65,29 @@ document.getElementById('sort-checkins-header').addEventListener('click', () => 
   }
   renderSorted();
 });
+
+document.getElementById('add-habit-form').addEventListener('submit', (e) => {
+  e.preventDefault();
+  const name = document.getElementById('name').value;
+  const category = document.getElementById('category').value;
+  const frequency = document.getElementById('frequency').value;
+
+  addHabit(name, category, frequency);
+  e.target.reset();
+  applyFilters();
+});
+
+document.getElementById('filter-category').addEventListener('change', applyFilters);
+document.getElementById('filter-date-from').addEventListener('change', applyFilters);
+document.getElementById('filter-date-to').addEventListener('change', applyFilters);
+document.getElementById('clear-filters').addEventListener('click', () => {
+  document.getElementById('filter-category').value = '';
+  document.getElementById('filter-date-from').value = '';
+  document.getElementById('filter-date-to').value = '';
+  applyFilters();
+});
+
+applyFilters();
 
 const initialSort = loadSort();
 document.getElementById('sort-field').value = initialSort.field;

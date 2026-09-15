@@ -25,7 +25,7 @@ function renderHabitList(list) {
 
   if (list.length === 0) {
     const row = document.createElement('tr');
-    row.innerHTML = '<td colspan="5">No habits to show.</td>';
+    row.innerHTML = '<td colspan="4">No habits match these filters.</td>';
     tbody.appendChild(row);
   }
 }

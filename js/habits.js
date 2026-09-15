@@ -2,24 +2,27 @@
 
 const CATEGORIES = ['Health', 'Productivity', 'Mindfulness', 'Learning', 'Other'];
 
-let habitList = [
-  { id: 1, name: 'Morning run', category: 'Health', frequency: 'Daily', completedDates: ['2026-09-01', '2026-09-02'] },
-  { id: 2, name: 'Read 20 pages', category: 'Learning', frequency: 'Daily', completedDates: ['2026-09-01'] },
-  { id: 3, name: 'Meditate', category: 'Mindfulness', frequency: 'Daily', completedDates: [] },
-{ id: 4, name: 'Weekly review', category: 'Productivity', frequency: 'Weekly', completedDates: ['2026-08-31'] },
+let habits = [
+  { id: 1, name: 'Morning run', category: 'Health', frequency: 'Daily', createdDate: '2026-08-01', completedDates: ['2026-09-01', '2026-09-02'] },
+  { id: 2, name: 'Read 20 pages', category: 'Learning', frequency: 'Daily', createdDate: '2026-08-02', completedDates: ['2026-09-01'] },
+  { id: 3, name: 'Meditate', category: 'Mindfulness', frequency: 'Daily', createdDate: '2026-08-03', completedDates: [] },
+  { id: 4, name: 'Weekly review', category: 'Productivity', frequency: 'Weekly', createdDate: '2026-08-05', completedDates: ['2026-08-31'] },
 ];
 
 let nextId = 5;
 
 function addHabit(name, category, frequency) {
-  const habit = { id: nextId++, name, category, frequency, completedDates: [] };
-  console.log('addHabit — created:', habit);
-  habitList.push(habit);
+  const habit = {
+    id: nextId++, name, category, frequency,
+    createdDate: new Date().toISOString().slice(0, 10),
+    completedDates: [],
+  };
+  habits.push(habit);
   return habit;
 }
 
 function getHabits() {
-  return habitList;
+  return habits;
 }
 
 function todayISO() {
