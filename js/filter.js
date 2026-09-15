@@ -3,8 +3,9 @@
 function filterHabits(habits, category, dateFrom, dateTo) {
   return habits.filter((habit) => {
     const matchesCategory = !category || habit.category === category;
-    const afterFrom = !dateFrom || habit.createdDate.getTime() >= dateFrom.getTime();
-    const beforeTo = !dateTo || habit.createdDate.getTime() <= dateTo.getTime();
+    const createdDate = new Date(habit.createdDate);
+    const afterFrom = !dateFrom || createdDate.getTime() >= dateFrom.getTime();
+    const beforeTo = !dateTo || createdDate.getTime() <= dateTo.getTime();
     return matchesCategory && afterFrom && beforeTo;
   });
 }
