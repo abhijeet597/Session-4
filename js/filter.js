@@ -3,11 +3,12 @@
 function filterHabits(habits, category, dateFrom, dateTo) {
   return habits.filter((habit) => {
     const matchesCategory = !category || habit.category === category;
-    const afterFrom = !dateFrom || habit.createdDate >= dateFrom;
-    const beforeTo = !dateTo || habit.createdDate <= dateTo;
+    const afterFrom = !dateFrom || habit.createdDate.getTime() >= dateFrom.getTime();
+    const beforeTo = !dateTo || habit.createdDate.getTime() <= dateTo.getTime();
     return matchesCategory && afterFrom && beforeTo;
   });
 }
+
 
 // Works as a plain browser global (loaded via <script>) and as a Node module (for tests)
 if (typeof module !== 'undefined' && module.exports) {
