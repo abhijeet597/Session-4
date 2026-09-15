@@ -17,10 +17,14 @@ function loadSort() {
 
 function applyFilters() {
   const category = document.getElementById('filter-category').value;
-  const dateFrom = document.getElementById('filter-date-from').value;
-  const dateTo = document.getElementById('filter-date-to').value;
+  const dateFromValue = document.getElementById('filter-date-from').value;
+  const dateToValue = document.getElementById('filter-date-to').value;
+  const dateFrom = dateFromValue ? new Date(dateFromValue) : null;
+  const dateTo = dateToValue ? new Date(dateToValue) : null;
+  const field = document.getElementById('sort-field').value;
+  const dir = document.getElementById('sort-dir').value;
   const filtered = filterHabits(getHabits(), category, dateFrom, dateTo);
-  renderHabitList(filtered);
+  renderHabitList(sortHabits(filtered, field, dir));
 }
 
 function renderSorted() {

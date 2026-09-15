@@ -1,5 +1,7 @@
 // habits.js — in-memory habit data (no backend yet — that comes later)
 
+// habits.js — in-memory habit data (no backend yet — that comes later)
+
 const CATEGORIES = ['Health', 'Productivity', 'Mindfulness', 'Learning', 'Other'];
 
 let habits = [
@@ -32,7 +34,7 @@ function todayISO() {
 }
 
 function checkInHabit(id) {
-  const habit = habitList.find((h) => h.id === id);
+  const habit = habits.find((h) => h.id === id);
   if (!habit) return null;
   const today = todayISO();
   if (!habit.completedDates.includes(today)) {
