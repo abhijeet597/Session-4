@@ -3,7 +3,7 @@
 
 const test = require('node:test');
 const assert = require('node:assert');
-const { filterHabits } = require('../js/filter.js');
+const { filterHabits } = require('../public/js/filter.js');
 
 // createdDate fixtures use 'YYYY-MM-DD' strings to match how habits.js
 // actually stores them.
