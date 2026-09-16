@@ -5,15 +5,6 @@
 const SORT_KEY = 'habitTracker.sort';
 const DEFAULT_SORT = { field: 'name', dir: 'asc' };
 
-const FILTER_IDS = ['filter-category', 'filter-date-from', 'filter-date-to'];
-
-function getFilterValues() {
-  const [category, dateFrom, dateTo] = FILTER_IDS.map(
-    (id) => document.getElementById(id).value
-  );
-  return { category, dateFrom, dateTo };
-}
-
 function loadSort() {
   try {
     const stored = JSON.parse(localStorage.getItem(SORT_KEY));
@@ -25,7 +16,9 @@ function loadSort() {
 }
 
 function applyFilters() {
-  const { category, dateFrom: dateFromValue, dateTo: dateToValue } = getFilterValues();
+  const category = document.getElementById('filter-category').value;
+  const dateFromValue = document.getElementById('filter-date-from').value;
+  const dateToValue = document.getElementById('filter-date-to').value;
   const dateFrom = dateFromValue ? new Date(dateFromValue) : null;
   const dateTo = dateToValue ? new Date(dateToValue) : null;
   const field = document.getElementById('sort-field').value;
@@ -88,14 +81,13 @@ document.getElementById('add-habit-form').addEventListener('submit', (e) => {
   applyFilters();
 });
 
-FILTER_IDS.forEach((id) => {
-  document.getElementById(id).addEventListener('change', applyFilters);
-});
-
+document.getElementById('filter-category').addEventListener('change', applyFilters);
+document.getElementById('filter-date-from').addEventListener('change', applyFilters);
+document.getElementById('filter-date-to').addEventListener('change', applyFilters);
 document.getElementById('clear-filters').addEventListener('click', () => {
-  FILTER_IDS.forEach((id) => {
-    document.getElementById(id).value = '';
-  });
+  document.getElementById('filter-category').value = '';
+  document.getElementById('filter-date-from').value = '';
+  document.getElementById('filter-date-to').value = '';
   applyFilters();
 });
 
