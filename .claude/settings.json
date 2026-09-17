@@ -9,16 +9,7 @@
   },
   "includeCoAuthoredBy": true,
   "permissions": {
-    "allow": [
-      "Bash(npm run test:*)",
-      "Bash(npm run lint:*)"
-    ],
-    "ask": [
-      "Bash(npm publish:*)"
-    ],
-    "deny": [
-      "Bash(rm -rf:*)",
-      "Read(./.env)"
-    ]
+    "allow": ["Bash(npm run test:*)", "Bash(npm run lint:*)"],
+    "deny": ["Bash(rm -rf:*)", "Read(./.env)"]
   }
 }
