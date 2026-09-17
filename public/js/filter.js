@@ -17,7 +17,34 @@ function filterHabits(habits, category, dateFrom, dateTo) {
 }
 
 
+function todayISO() {
+  return new Date().toISOString().slice(0, 10);
+}
+
+function sortHabits(list, field, dir) {
+  const sorted = [...list].sort((a, b) => {
+    let valA;
+    let valB;
+
+    if (field === 'checkins') {
+      valA = a.completedDates.length;
+      valB = b.completedDates.length;
+    } else {
+      valA = a[field];
+      valB = b[field];
+    }
+
+    if (valA < valB) return -1;
+    if (valA > valB) return 1;
+    return 0;
+  });
+
+  if (dir === 'desc') sorted.reverse();
+
+  return sorted;
+}
+
 // Works as a plain browser global (loaded via <script>) and as a Node module (for tests)
 if (typeof module !== 'undefined' && module.exports) {
-  module.exports = { filterHabits };
+  module.exports = { filterHabits, sortHabits, todayISO };
 }

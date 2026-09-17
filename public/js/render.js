@@ -25,6 +25,14 @@ function renderHabitList(list) {
         >
           ${done ? 'Checked in ✓' : 'Check in today'}
         </button>
+        // <button
+        //   type="button"
+        //   class="delete-btn"
+        //   data-id="${habit._id}"
+        // >
+        //   Delete
+        // </button>
+
         <button
           type="button"
           class="edit-btn"
@@ -40,6 +48,7 @@ function renderHabitList(list) {
         >
           Delete
         </button>
+
       </td>
     `;
 

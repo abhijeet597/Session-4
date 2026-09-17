@@ -59,3 +59,41 @@ async function deleteHabit(id) {
 
   return true;
 }
+
+async function updateHabit(id, frequency) {
+  const res = await fetch(`${API_BASE}/${id}`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ frequency }),
+  });
+
+  if (!res.ok) {
+    const data = await res.json();
+    throw new Error(data.error || 'Failed to update habit');
+  }
+
+  return res.json();
+}
+
+async function checkInHabit(id) {
+  const today = todayISO();
+  const habit = localHabitsCache.find((h) => h._id === id);
+  const completedDates = habit ? [...habit.completedDates, today] : [today];
+
+  const res = await fetch(`${API_BASE}/${id}`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ completedDates }),
+  });
+
+  if (!res.ok) {
+    const data = await res.json();
+    throw new Error(data.error || 'Failed to check in habit');
+  }
+
+  return res.json();
+}
