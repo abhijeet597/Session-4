@@ -1,4 +1,13 @@
 {
+  "env": {
+    "MONGODB_URI": "mongodb://localhost:27017/habit-tracker"
+  },
+  "model": "claude-sonnet-4-6",
+  "statusLine": {
+    "type": "command",
+    "command": "echo \"habit-tracker · $(git branch --show-current)\""
+  },
+  "includeCoAuthoredBy": true,
   "permissions": {
     "allow": [
       "Bash(npm run test:*)",
