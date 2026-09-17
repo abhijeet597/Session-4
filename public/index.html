@@ -34,13 +34,7 @@
   <form id="add-habit-form">
     <input type="text" id="name" placeholder="Habit name" required>
 
-    <select id="category" required>
-      <option value="Health">Health</option>
-      <option value="Productivity">Productivity</option>
-      <option value="Mindfulness">Mindfulness</option>
-      <option value="Learning">Learning</option>
-      <option value="Other">Other</option>
-    </select>
+    <select id="category" required></select>
 
     <select id="frequency" required>
       <option value="Daily">Daily</option>
@@ -51,6 +45,11 @@
     <input type="number" id="day-of-month" placeholder="Day of month (1-31)" min="1" max="31" hidden>
 
     <button type="submit">Add Habit</button>
+  </form>
+
+  <form id="add-category-form">
+    <input type="text" id="category-name" placeholder="New category" required>
+    <button type="submit">Add Category</button>
   </form>
 
   <div id="sort-controls">
@@ -72,14 +71,7 @@
   <div id="filter-controls">
     <label for="filter-category">Filter by category</label>
 
-    <select id="filter-category">
-      <option value="">All Categories</option>
-      <option value="Health">Health</option>
-      <option value="Productivity">Productivity</option>
-      <option value="Mindfulness">Mindfulness</option>
-      <option value="Learning">Learning</option>
-      <option value="Other">Other</option>
-    </select>
+    <select id="filter-category"></select>
 
     <label for="filter-date-from">Created from</label>
     <input type="date" id="filter-date-from">

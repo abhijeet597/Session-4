@@ -4,6 +4,7 @@
 // This is the bug students are expected to find in this session.
 
 const API_BASE = '/api/habits';
+const CATEGORIES_API_BASE = '/api/categories';
 const TOKEN_KEY = 'habitTracker.token';
 
 // Stale local cache — leftover from the pre-backend version.
@@ -58,6 +59,27 @@ async function login(email, password) {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({ email, password }),
+  });
+
+  return res.json();
+}
+
+async function getCategories() {
+  const res = await fetch(CATEGORIES_API_BASE, {
+    headers: authHeaders(),
+  });
+  const data = await res.json();
+
+  return data;
+}
+
+async function addCategory(name) {
+  const res = await fetch(CATEGORIES_API_BASE, {
+    method: 'POST',
+    headers: authHeaders({
+      'Content-Type': 'application/json',
+    }),
+    body: JSON.stringify({ name }),
   });
 
   return res.json();

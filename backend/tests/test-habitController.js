@@ -46,6 +46,13 @@ test('createHabit rejects an unrecognized category', async () => {
   assert.strictEqual(res.statusCode, 400);
 });
 
+test('createHabit rejects a Monthly habit missing dayOfMonth', async () => {
+  mock.method(Category, 'findOne', async () => ({ _id: '1', name: 'Health' }));
+  const res = mockRes();
+  await createHabit({ userId: 'user-1', body: { name: 'Pay bills', category: 'Health', frequency: 'Monthly' } }, res);
+  assert.strictEqual(res.statusCode, 400);
+});
+
 test('createHabit creates and returns the habit with 201', async () => {
   mock.method(Category, 'findOne', async () => ({ _id: '1', name: 'Mindfulness' }));
   mock.method(Habit, 'create', async (data) => ({ _id: 'new-id', ...data }));

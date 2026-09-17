@@ -18,6 +18,12 @@ function logout() {
   showAuthView();
 }
 
+async function refreshCategoryOptions() {
+  const categories = await getCategories();
+  renderCategoryOptions(document.getElementById('category'), categories);
+  renderCategoryOptions(document.getElementById('filter-category'), categories, { includeAllOption: true });
+}
+
 async function initApp() {
   showApp();
 
@@ -25,6 +31,7 @@ async function initApp() {
   document.getElementById('sort-field').value = initialSort.field;
   document.getElementById('sort-dir').value = initialSort.dir;
 
+  await refreshCategoryOptions();
   await applyFilters();
 }
 
@@ -134,6 +141,21 @@ FILTER_IDS.forEach((id) => {
     .getElementById(id)
     .addEventListener('change', applyFilters);
 });
+
+// Add category
+document
+  .getElementById('add-category-form')
+  .addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const name = document.getElementById('category-name').value;
+
+    await addCategory(name);
+
+    e.target.reset();
+
+    await refreshCategoryOptions();
+  });
 
 // Sorting
 document

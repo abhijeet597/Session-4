@@ -1,6 +1,29 @@
 // render.js — turns the habits array into table rows in the DOM
 // MongoDB documents use _id, not id.
 
+function renderCategoryOptions(selectEl, categories, opts = {}) {
+  const { includeAllOption = false } = opts;
+  const previousValue = selectEl.value;
+
+  selectEl.innerHTML = '';
+
+  if (includeAllOption) {
+    const allOption = document.createElement('option');
+    allOption.value = '';
+    allOption.textContent = 'All Categories';
+    selectEl.appendChild(allOption);
+  }
+
+  categories.forEach((category) => {
+    const option = document.createElement('option');
+    option.value = category.name;
+    option.textContent = category.name;
+    selectEl.appendChild(option);
+  });
+
+  selectEl.value = previousValue;
+}
+
 function renderHabitList(list) {
   const tbody = document.getElementById('habit-list-body');
   tbody.innerHTML = '';

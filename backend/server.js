@@ -5,6 +5,7 @@ const path = require('path');
 const habitsRouter = require('./routes/habits');
 const categoriesRouter = require('./routes/categories');
 const authRouter = require('./routes/auth');
+const dashboardRouter = require('./routes/dashboard');
 const requireAuth = require('./middleware/requireAuth');
 
 const app = express();
@@ -13,6 +14,7 @@ app.use(express.json());
 app.use('/api/auth', authRouter);
 app.use('/api/habits', requireAuth, habitsRouter);
 app.use('/api/categories', requireAuth, categoriesRouter);
+app.use('/api/dashboard', requireAuth, dashboardRouter);
 app.use(express.static(path.join(__dirname, '../public')));
 
 if (require.main === module) {

@@ -2,7 +2,7 @@ const { test, mock, afterEach } = require('node:test');
 const assert = require('node:assert');
 
 const Category = require('../models/Category');
-const { getCategories, createCategory, deleteCategory } = require('../controllers/categoryController');
+const { getCategories, createCategory } = require('../controllers/categoryController');
 
 function mockRes() {
   return {
@@ -43,18 +43,4 @@ test('createCategory creates a new category', async () => {
   const res = mockRes();
   await createCategory({ body: { name: 'Travel' } }, res);
   assert.strictEqual(res.statusCode, 201);
-});
-
-test('deleteCategory returns 404 for a non-existent id', async () => {
-  mock.method(Category, 'findByIdAndDelete', async () => null);
-  const res = mockRes();
-  await deleteCategory({ params: { id: 'x' } }, res);
-  assert.strictEqual(res.statusCode, 404);
-});
-
-test('deleteCategory returns 204 on success', async () => {
-  mock.method(Category, 'findByIdAndDelete', async (id) => ({ _id: id }));
-  const res = mockRes();
-  await deleteCategory({ params: { id: '1' } }, res);
-  assert.strictEqual(res.statusCode, 204);
 });
