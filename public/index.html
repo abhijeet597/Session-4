@@ -34,6 +34,7 @@
   <form id="add-habit-form">
     <input type="text" id="name" placeholder="Habit name" required>
 
+    <!-- Categories fix: was a hardcoded list of <option>s, now filled by JS from /api/categories -->
     <select id="category" required></select>
 
     <select id="frequency" required>
@@ -47,6 +48,7 @@
     <button type="submit">Add Habit</button>
   </form>
 
+  <!-- Categories fix: new form so users can actually add categories to the database -->
   <form id="add-category-form">
     <input type="text" id="category-name" placeholder="New category" required>
     <button type="submit">Add Category</button>
@@ -71,6 +73,7 @@
   <div id="filter-controls">
     <label for="filter-category">Filter by category</label>
 
+    <!-- Categories fix: was a hardcoded list of <option>s, now filled by JS from /api/categories -->
     <select id="filter-category"></select>
 
     <label for="filter-date-from">Created from</label>

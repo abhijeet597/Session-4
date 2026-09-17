@@ -1,6 +1,7 @@
 // render.js — turns the habits array into table rows in the DOM
 // MongoDB documents use _id, not id.
 
+// Categories fix: builds the dropdown's <option> list from real category data.
 function renderCategoryOptions(selectEl, categories, opts = {}) {
   const { includeAllOption = false } = opts;
   const previousValue = selectEl.value;
@@ -48,13 +49,6 @@ function renderHabitList(list) {
         >
           ${done ? 'Checked in ✓' : 'Check in today'}
         </button>
-        // <button
-        //   type="button"
-        //   class="delete-btn"
-        //   data-id="${habit._id}"
-        // >
-        //   Delete
-        // </button>
 
         <button
           type="button"

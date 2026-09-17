@@ -64,6 +64,7 @@ async function login(email, password) {
   return res.json();
 }
 
+// Categories fix: fetches the real category list from the backend instead of a hardcoded one.
 async function getCategories() {
   const res = await fetch(CATEGORIES_API_BASE, {
     headers: authHeaders(),
@@ -73,6 +74,7 @@ async function getCategories() {
   return data;
 }
 
+// Categories fix: lets a user actually create a category, so the dropdown has something to show.
 async function addCategory(name) {
   const res = await fetch(CATEGORIES_API_BASE, {
     method: 'POST',

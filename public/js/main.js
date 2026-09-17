@@ -18,6 +18,7 @@ function logout() {
   showAuthView();
 }
 
+// Categories fix: fetches categories and fills both the add-habit and filter dropdowns.
 async function refreshCategoryOptions() {
   const categories = await getCategories();
   renderCategoryOptions(document.getElementById('category'), categories);
@@ -31,6 +32,7 @@ async function initApp() {
   document.getElementById('sort-field').value = initialSort.field;
   document.getElementById('sort-dir').value = initialSort.dir;
 
+  // Categories fix: populate dropdowns before rendering habits.
   await refreshCategoryOptions();
   await applyFilters();
 }
@@ -142,7 +144,7 @@ FILTER_IDS.forEach((id) => {
     .addEventListener('change', applyFilters);
 });
 
-// Add category
+// Categories fix: handles the new add-category form, then refreshes both dropdowns.
 document
   .getElementById('add-category-form')
   .addEventListener('submit', async (e) => {
