@@ -76,6 +76,7 @@ async function renderSorted() {
   renderHabitList(sortHabits(habits, field, dir));
 }
 
+// Add habbit
 document
   .getElementById('add-habit-form')
   .addEventListener('submit', async (e) => {
@@ -98,10 +99,12 @@ FILTER_IDS.forEach((id) => {
     .addEventListener('change', applyFilters);
 });
 
+// Sorting
 document
   .getElementById('sort-controls')
   .addEventListener('change', renderSorted);
 
+// Clear Filters
 document
   .getElementById('clear-filters')
   .addEventListener('click', () => {
@@ -112,17 +115,39 @@ document
     applyFilters();
   });
 
+
 // Delete button
 document
   .getElementById('habit-list-body')
-  .addEventListener('click', (e) => {
+  .addEventListener('click', async (e) => {
     if (e.target.classList.contains('delete-btn')) {
-      deleteHabit(e.target.dataset.id);
-      applyFilters();
+      await deleteHabit(e.target.dataset.id);
+      await applyFilters();
     }
   });
 
-// Check-in button
+// Edit button
+document
+  .getElementById('habit-list-body')
+  .addEventListener('click', async (e) => {
+    if (e.target.classList.contains('edit-btn')) {
+      const id = e.target.dataset.id;
+
+      const frequency = prompt(
+        'Enter new frequency (Daily or Weekly):'
+      );
+
+      if (frequency !== 'Daily' && frequency !== 'Weekly') {
+        return;
+      }
+
+      await updateHabit(id, frequency);
+
+      await applyFilters();
+    }
+  });
+
+  // Check-in button
 document
   .getElementById('habit-list-body')
   .addEventListener('click', async (e) => {

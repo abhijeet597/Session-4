@@ -19,11 +19,22 @@ async function createHabit(req, res) {
 
 // TODO (this session's continuing work): implement update and delete
 async function updateHabit(req, res) {
-  res.status(501).json({ error: 'Not implemented yet' });
+  const { id } = req.params;
+  const updated = await Habit.findByIdAndUpdate(id, req.body, { new: true, runValidators: true });
+  if (!updated) {
+    return res.status(404).json({ error: 'Habit not found' });
+  }
+  res.json(updated);
 }
 
 async function deleteHabit(req, res) {
-  res.status(501).json({ error: 'Not implemented yet' });
+  const { id } = req.params;
+  const deleted = await Habit.findByIdAndDelete(id);
+  if (!deleted) {
+    return res.status(404).json({ error: 'Habit not found' });
+  }
+  res.status(204).send();
 }
+
 
 module.exports = { getHabits, createHabit, updateHabit, deleteHabit };

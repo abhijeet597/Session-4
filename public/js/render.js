@@ -27,6 +27,14 @@ function renderHabitList(list) {
         </button>
         <button
           type="button"
+          class="edit-btn"
+          data-id="${habit._id}"
+        >
+          Edit
+        </button>
+
+        <button
+          type="button"
           class="delete-btn"
           data-id="${habit._id}"
         >

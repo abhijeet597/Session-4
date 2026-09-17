@@ -36,13 +36,26 @@ async function addHabit(name, category, frequency) {
 // Intentionally unchanged from the previous in-memory implementation.
 // BUG: This only removes the habit from the local cache.
 // It does NOT send a DELETE request to the backend.
-function deleteHabit(id) {
-  const index = localHabitsCache.findIndex(
-    (habit) => habit._id === id
-  );
+// function deleteHabit(id) {
+//   const index = localHabitsCache.findIndex(
+//     (habit) => habit._id === id
+//   );
 
-  if (index === -1) return false;
+//   if (index === -1) return false;
 
-  localHabitsCache.splice(index, 1);
+//   localHabitsCache.splice(index, 1);
+//   return true;
+// }
+
+async function deleteHabit(id) {
+  const res = await fetch(`${API_BASE}/${id}`, {
+    method: 'DELETE',
+  });
+
+  if (!res.ok) {
+    const data = await res.json();
+    throw new Error(data.error || 'Failed to delete habit');
+  }
+
   return true;
 }
