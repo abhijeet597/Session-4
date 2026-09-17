@@ -3,6 +3,31 @@
 
 const SORT_KEY = 'habitTracker.sort';
 
+function showApp() {
+  document.getElementById('auth-view').hidden = true;
+  document.getElementById('app-view').hidden = false;
+}
+
+function showAuthView() {
+  document.getElementById('auth-view').hidden = false;
+  document.getElementById('app-view').hidden = true;
+}
+
+function logout() {
+  clearToken();
+  showAuthView();
+}
+
+async function initApp() {
+  showApp();
+
+  const initialSort = loadSort();
+  document.getElementById('sort-field').value = initialSort.field;
+  document.getElementById('sort-dir').value = initialSort.dir;
+
+  await applyFilters();
+}
+
 const DEFAULT_SORT = {
   field: 'name',
   dir: 'asc',
@@ -76,6 +101,13 @@ async function renderSorted() {
   renderHabitList(sortHabits(habits, field, dir));
 }
 
+// Show the day-of-month field only for Monthly habits.
+document
+  .getElementById('frequency')
+  .addEventListener('change', (e) => {
+    document.getElementById('day-of-month').hidden = e.target.value !== 'Monthly';
+  });
+
 // Add habbit
 document
   .getElementById('add-habit-form')
@@ -85,10 +117,14 @@ document
     const name = document.getElementById('name').value;
     const category = document.getElementById('category').value;
     const frequency = document.getElementById('frequency').value;
+    const dayOfMonth = frequency === 'Monthly'
+      ? Number(document.getElementById('day-of-month').value)
+      : undefined;
 
-    await addHabit(name, category, frequency);
+    await addHabit(name, category, frequency, dayOfMonth);
 
     e.target.reset();
+    document.getElementById('day-of-month').hidden = true;
 
     await applyFilters();
   });
@@ -177,11 +213,58 @@ document
     await renderSorted();
   });
 
-// Restore saved sorting preferences.
-const initialSort = loadSort();
+// Login form
+document
+  .getElementById('login-form')
+  .addEventListener('submit', async (e) => {
+    e.preventDefault();
 
-document.getElementById('sort-field').value = initialSort.field;
-document.getElementById('sort-dir').value = initialSort.dir;
+    const email = document.getElementById('login-email').value;
+    const password = document.getElementById('login-password').value;
 
-// Initial render.
-applyFilters();
+    const result = await login(email, password);
+
+    if (!result.token) {
+      document.getElementById('auth-error').textContent = result.error || 'Login failed';
+      return;
+    }
+
+    setToken(result.token);
+    document.getElementById('auth-error').textContent = '';
+    e.target.reset();
+    await initApp();
+  });
+
+// Signup form
+document
+  .getElementById('signup-form')
+  .addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const email = document.getElementById('signup-email').value;
+    const password = document.getElementById('signup-password').value;
+
+    const result = await signup(email, password);
+
+    if (!result.token) {
+      document.getElementById('auth-error').textContent = result.error || 'Signup failed';
+      return;
+    }
+
+    setToken(result.token);
+    document.getElementById('auth-error').textContent = '';
+    e.target.reset();
+    await initApp();
+  });
+
+// Logout button
+document
+  .getElementById('logout-btn')
+  .addEventListener('click', logout);
+
+// Only show the app and load habits if a token already exists.
+if (getToken()) {
+  initApp();
+} else {
+  showAuthView();
+}

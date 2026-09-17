@@ -3,11 +3,16 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const path = require('path');
 const habitsRouter = require('./routes/habits');
+const categoriesRouter = require('./routes/categories');
+const authRouter = require('./routes/auth');
+const requireAuth = require('./middleware/requireAuth');
 
 const app = express();
 app.use(cors());
 app.use(express.json());
-app.use('/api/habits', habitsRouter);
+app.use('/api/auth', authRouter);
+app.use('/api/habits', requireAuth, habitsRouter);
+app.use('/api/categories', requireAuth, categoriesRouter);
 app.use(express.static(path.join(__dirname, '../public')));
 
 if (require.main === module) {

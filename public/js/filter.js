@@ -21,6 +21,22 @@ function todayISO() {
   return new Date().toISOString().slice(0, 10);
 }
 
+function getNextDueDate(lastCompletedDate, rule) {
+  const last = new Date(`${lastCompletedDate}T00:00:00Z`);
+
+  if (rule.interval === 'weekly') {
+    last.setUTCDate(last.getUTCDate() + 7);
+    return last.toISOString().slice(0, 10);
+  }
+
+  if (rule.interval === 'monthly') {
+    last.setUTCMonth(last.getUTCMonth() + 1);
+    return last.toISOString().slice(0, 10);
+  }
+
+  throw new Error(`Unknown recurrence interval: ${rule.interval}`);
+}
+
 function sortHabits(list, field, dir) {
   const sorted = [...list].sort((a, b) => {
     let valA;
@@ -46,5 +62,5 @@ function sortHabits(list, field, dir) {
 
 // Works as a plain browser global (loaded via <script>) and as a Node module (for tests)
 if (typeof module !== 'undefined' && module.exports) {
-  module.exports = { filterHabits, sortHabits, todayISO };
+  module.exports = { filterHabits, sortHabits, todayISO, getNextDueDate };
 }

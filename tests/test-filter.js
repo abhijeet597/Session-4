@@ -3,7 +3,7 @@
 
 const test = require('node:test');
 const assert = require('node:assert');
-const { filterHabits } = require('../public/js/filter.js');
+const { filterHabits, getNextDueDate } = require('../public/js/filter.js');
 
 // createdDate fixtures use 'YYYY-MM-DD' strings to match how habits.js
 // actually stores them.
@@ -49,4 +49,26 @@ test('filters that match nothing return an empty array', () => {
   const dateTo = new Date('2026-08-01');
   const result = filterHabits(habits, 'Learning', dateFrom, dateTo);
   assert.deepStrictEqual(result, []);
+});
+
+test('weekly recurrence adds 7 days', () => {
+  const result = getNextDueDate('2026-01-01', { interval: 'weekly' });
+  assert.strictEqual(result, '2026-01-08');
+});
+
+test('monthly recurrence adds 1 month', () => {
+  const result = getNextDueDate('2026-01-15', { interval: 'monthly' });
+  assert.strictEqual(result, '2026-02-15');
+});
+
+test('monthly recurrence handles month-end rollover correctly', () => {
+  // JavaScript's Date does not clamp to the last valid day of a shorter
+  // month — adding one month to Jan 31 overflows into March, since
+  // February has no 31st. This is a real product decision, not a bug.
+  const result = getNextDueDate('2026-01-31', { interval: 'monthly' });
+  assert.strictEqual(result, '2026-03-03');
+});
+
+test('unknown interval throws', () => {
+  assert.throws(() => getNextDueDate('2026-01-01', { interval: 'yearly' }));
 });

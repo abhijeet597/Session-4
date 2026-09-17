@@ -4,29 +4,86 @@
 // This is the bug students are expected to find in this session.
 
 const API_BASE = '/api/habits';
+const TOKEN_KEY = 'habitTracker.token';
 
 // Stale local cache — leftover from the pre-backend version.
 // getHabits() populates it, but deleteHabit() incorrectly operates on it.
 let localHabitsCache = [];
 
+function getToken() {
+  try {
+    return localStorage.getItem(TOKEN_KEY);
+  } catch (e) {
+    return null;
+  }
+}
+
+function setToken(token) {
+  try {
+    localStorage.setItem(TOKEN_KEY, token);
+  } catch (e) {
+    // Ignore storage failures.
+  }
+}
+
+function clearToken() {
+  try {
+    localStorage.removeItem(TOKEN_KEY);
+  } catch (e) {
+    // Ignore storage failures.
+  }
+}
+
+function authHeaders(extra = {}) {
+  const token = getToken();
+  return token ? { ...extra, Authorization: `Bearer ${token}` } : extra;
+}
+
+async function signup(email, password) {
+  const res = await fetch('/api/auth/signup', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ email, password }),
+  });
+
+  return res.json();
+}
+
+async function login(email, password) {
+  const res = await fetch('/api/auth/login', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ email, password }),
+  });
+
+  return res.json();
+}
+
 async function getHabits() {
-  const res = await fetch(API_BASE);
+  const res = await fetch(API_BASE, {
+    headers: authHeaders(),
+  });
   const data = await res.json();
 
   localHabitsCache = data;
   return data;
 }
 
-async function addHabit(name, category, frequency) {
+async function addHabit(name, category, frequency, dayOfMonth) {
   const res = await fetch(API_BASE, {
     method: 'POST',
-    headers: {
+    headers: authHeaders({
       'Content-Type': 'application/json',
-    },
+    }),
     body: JSON.stringify({
       name,
       category,
       frequency,
+      dayOfMonth,
     }),
   });
 
@@ -50,6 +107,7 @@ async function addHabit(name, category, frequency) {
 async function deleteHabit(id) {
   const res = await fetch(`${API_BASE}/${id}`, {
     method: 'DELETE',
+    headers: authHeaders(),
   });
 
   if (!res.ok) {
@@ -63,9 +121,9 @@ async function deleteHabit(id) {
 async function updateHabit(id, frequency) {
   const res = await fetch(`${API_BASE}/${id}`, {
     method: 'PUT',
-    headers: {
+    headers: authHeaders({
       'Content-Type': 'application/json',
-    },
+    }),
     body: JSON.stringify({ frequency }),
   });
 
@@ -84,9 +142,9 @@ async function checkInHabit(id) {
 
   const res = await fetch(`${API_BASE}/${id}`, {
     method: 'PUT',
-    headers: {
+    headers: authHeaders({
       'Content-Type': 'application/json',
-    },
+    }),
     body: JSON.stringify({ completedDates }),
   });
 
