@@ -6,77 +6,93 @@
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-  <h1>Habit Tracker</h1>
 
-  <button type="button" id="logout-btn">Log Out</button>
+  <header class="app-header">
+    <h1>Habit Tracker</h1>
+    <button type="button" id="logout-btn" class="btn-logout">Log Out</button>
+  </header>
 
-  <form id="add-habit-form">
-    <input type="text" id="name" placeholder="Habit name" required>
+  <main class="app-main">
 
-    <!-- Categories fix: was a hardcoded list of <option>s, now filled by JS from /api/categories -->
-    <select id="category" required></select>
+    <div class="forms-row">
+      <div class="card form-section">
+        <p class="section-title">Add Habit</p>
+        <form id="add-habit-form">
+          <input type="text" id="name" placeholder="Habit name" required>
 
-    <select id="frequency" required>
-      <option value="Daily">Daily</option>
-      <option value="Weekly">Weekly</option>
-      <option value="Monthly">Monthly</option>
-    </select>
+          <!-- Categories fix: was a hardcoded list of <option>s, now filled by JS from /api/categories -->
+          <select id="category" required></select>
 
-    <input type="number" id="day-of-month" placeholder="Day of month (1-31)" min="1" max="31" hidden>
+          <select id="frequency" required>
+            <option value="Daily">Daily</option>
+            <option value="Weekly">Weekly</option>
+            <option value="Monthly">Monthly</option>
+          </select>
 
-    <button type="submit">Add Habit</button>
-  </form>
+          <input type="number" id="day-of-month" placeholder="Day of month (1-31)" min="1" max="31" hidden>
 
-  <!-- Categories fix: new form so users can actually add categories to the database -->
-  <form id="add-category-form">
-    <input type="text" id="category-name" placeholder="New category" required>
-    <button type="submit">Add Category</button>
-  </form>
+          <button type="submit">Add Habit</button>
+        </form>
+      </div>
 
-  <div id="sort-controls">
-    <label for="sort-field">Sort by</label>
+      <!-- Categories fix: new form so users can actually add categories to the database -->
+      <div class="card form-section">
+        <p class="section-title">Add Category</p>
+        <form id="add-category-form">
+          <input type="text" id="category-name" placeholder="New category" required>
+          <button type="submit">Add Category</button>
+        </form>
+      </div>
+    </div>
 
-    <select id="sort-field">
-      <option value="name">Name</option>
-      <option value="category">Category</option>
-      <option value="frequency">Frequency</option>
-      <option value="checkins">Check-ins</option>
-    </select>
+    <div class="card controls-bar">
+      <div class="controls-group">
+        <span class="controls-label">Sort by</span>
+        <div id="sort-controls" style="display:flex;gap:0.5rem;align-items:center;">
+          <select id="sort-field">
+            <option value="name">Name</option>
+            <option value="category">Category</option>
+            <option value="frequency">Frequency</option>
+            <option value="checkins">Check-ins</option>
+          </select>
 
-    <select id="sort-dir">
-      <option value="asc">Ascending</option>
-      <option value="desc">Descending</option>
-    </select>
-  </div>
+          <select id="sort-dir">
+            <option value="asc">Ascending</option>
+            <option value="desc">Descending</option>
+          </select>
+        </div>
+      </div>
 
-  <div id="filter-controls">
-    <label for="filter-category">Filter by category</label>
+      <div class="controls-divider"></div>
 
-    <!-- Categories fix: was a hardcoded list of <option>s, now filled by JS from /api/categories -->
-    <select id="filter-category"></select>
+      <div class="controls-group" id="filter-controls">
+        <span class="controls-label">Filter</span>
 
-    <label for="filter-date-from">Created from</label>
-    <input type="date" id="filter-date-from">
+        <!-- Categories fix: was a hardcoded list of <option>s, now filled by JS from /api/categories -->
+        <select id="filter-category"></select>
 
-    <label for="filter-date-to">Created to</label>
-    <input type="date" id="filter-date-to">
+        <input type="date" id="filter-date-from">
+        <input type="date" id="filter-date-to">
 
-    <button type="button" id="clear-filters">Clear Filters</button>
-  </div>
+        <button type="button" id="clear-filters">Clear Filters</button>
+      </div>
+    </div>
 
-  <table id="habit-table">
-    <thead>
-      <tr>
-        <th>Habit</th>
-        <th>Category</th>
-        <th>Frequency</th>
-        <th id="sort-checkins-header" class="sortable">Check-ins</th>
-        <th>Actions</th>
-      </tr>
-    </thead>
+    <table id="habit-table">
+      <thead>
+        <tr>
+          <th>Habit</th>
+          <th>Category</th>
+          <th>Frequency</th>
+          <th id="sort-checkins-header" class="sortable">Check-ins</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
 
-    <tbody id="habit-list-body"></tbody>
-  </table>
+      <tbody id="habit-list-body"></tbody>
+    </table>
+
+  </main>
 
   <script src="js/habits.js"></script>
   <script src="js/render.js"></script>
