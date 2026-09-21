@@ -245,7 +245,9 @@ button {
 /* Primary — filled indigo */
 .btn-primary,
 #add-habit-form button[type="submit"],
-#add-category-form button[type="submit"] {
+#add-category-form button[type="submit"],
+#login-form button[type="submit"],
+#signup-form button[type="submit"] {
   background: var(--color-accent);
   color: #fff;
   border-color: var(--color-accent);
@@ -253,7 +255,9 @@ button {
 
 .btn-primary:hover,
 #add-habit-form button[type="submit"]:hover,
-#add-category-form button[type="submit"]:hover {
+#add-category-form button[type="submit"]:hover,
+#login-form button[type="submit"]:hover,
+#signup-form button[type="submit"]:hover {
   background: var(--color-accent-hover);
   border-color: var(--color-accent-hover);
   transform: translateY(-1px);
@@ -262,7 +266,9 @@ button {
 
 .btn-primary:active,
 #add-habit-form button[type="submit"]:active,
-#add-category-form button[type="submit"]:active {
+#add-category-form button[type="submit"]:active,
+#login-form button[type="submit"]:active,
+#signup-form button[type="submit"]:active {
   background: var(--color-accent-active);
   border-color: var(--color-accent-active);
   transform: translateY(0);
