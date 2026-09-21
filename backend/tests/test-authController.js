@@ -30,7 +30,7 @@ test('signup rejects a duplicate email', async () => {
   assert.strictEqual(res.statusCode, 409);
 });
 
-test('signup creates a user with a real bcrypt hash and returns a token', async () => {
+test('signup creates a user with a REAL bcrypt hash (not the plaintext password) and returns a real JWT', async () => {
   mock.method(User, 'findOne', async () => null);
   mock.method(User, 'create', async (data) => ({ _id: 'new-id', ...data }));
   const res = mockRes();
@@ -48,7 +48,7 @@ test('login rejects a correct email with the wrong password', async () => {
   assert.strictEqual(res.statusCode, 401);
 });
 
-test('login succeeds with the correct password and returns a token', async () => {
+test('login succeeds with the correct password and returns a valid token', async () => {
   const hash = await bcrypt.hash('correctpass', 10);
   mock.method(User, 'findOne', async () => ({ _id: '1', email: 'a@example.com', passwordHash: hash }));
   const res = mockRes();

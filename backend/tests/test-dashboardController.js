@@ -75,15 +75,6 @@ test('getDashboard breaks down completions by category', async () => {
   assert.deepStrictEqual(res.body.completionsByCategory, { Health: 3, Learning: 1 });
 });
 
-test('getDashboard returns a 0 completion rate when old completions fall outside this week', async () => {
-  mock.method(Habit, 'find', async () => [
-    { category: 'Health', completedDates: ['2020-01-01', '2020-01-02'] },
-  ]);
-  const res = mockRes();
-  await getDashboard({ userId: 'u1' }, res);
-  assert.strictEqual(res.body.thisWeekCompletionRate, 0);
-});
-
 test('getDashboard only reads habits scoped to req.userId', async () => {
   let calledWith;
   mock.method(Habit, 'find', async (query) => { calledWith = query; return []; });

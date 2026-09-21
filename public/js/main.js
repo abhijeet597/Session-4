@@ -3,19 +3,9 @@
 
 const SORT_KEY = 'habitTracker.sort';
 
-function showApp() {
-  document.getElementById('auth-view').hidden = true;
-  document.getElementById('app-view').hidden = false;
-}
-
-function showAuthView() {
-  document.getElementById('auth-view').hidden = false;
-  document.getElementById('app-view').hidden = true;
-}
-
 function logout() {
   clearToken();
-  showAuthView();
+  window.location.href = 'login.html';
 }
 
 // Categories fix: fetches categories and fills both the add-habit and filter dropdowns.
@@ -26,8 +16,6 @@ async function refreshCategoryOptions() {
 }
 
 async function initApp() {
-  showApp();
-
   const initialSort = loadSort();
   document.getElementById('sort-field').value = initialSort.field;
   document.getElementById('sort-dir').value = initialSort.dir;
@@ -237,58 +225,15 @@ document
     await renderSorted();
   });
 
-// Login form
-document
-  .getElementById('login-form')
-  .addEventListener('submit', async (e) => {
-    e.preventDefault();
-
-    const email = document.getElementById('login-email').value;
-    const password = document.getElementById('login-password').value;
-
-    const result = await login(email, password);
-
-    if (!result.token) {
-      document.getElementById('auth-error').textContent = result.error || 'Login failed';
-      return;
-    }
-
-    setToken(result.token);
-    document.getElementById('auth-error').textContent = '';
-    e.target.reset();
-    await initApp();
-  });
-
-// Signup form
-document
-  .getElementById('signup-form')
-  .addEventListener('submit', async (e) => {
-    e.preventDefault();
-
-    const email = document.getElementById('signup-email').value;
-    const password = document.getElementById('signup-password').value;
-
-    const result = await signup(email, password);
-
-    if (!result.token) {
-      document.getElementById('auth-error').textContent = result.error || 'Signup failed';
-      return;
-    }
-
-    setToken(result.token);
-    document.getElementById('auth-error').textContent = '';
-    e.target.reset();
-    await initApp();
-  });
-
 // Logout button
 document
   .getElementById('logout-btn')
   .addEventListener('click', logout);
 
-// Only show the app and load habits if a token already exists.
+// index.html is the authenticated app — redirect to the login page if
+// there's no token, instead of showing/hiding an in-page auth view.
 if (getToken()) {
   initApp();
 } else {
-  showAuthView();
+  window.location.href = 'login.html';
 }

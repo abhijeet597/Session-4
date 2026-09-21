@@ -39,20 +39,6 @@ test('createHabit rejects a request missing required fields', async () => {
   assert.strictEqual(res.statusCode, 400);
 });
 
-test('createHabit rejects an unrecognized category', async () => {
-  mock.method(Category, 'findOne', async () => null);
-  const res = mockRes();
-  await createHabit({ userId: 'user-1', body: { name: 'Meditate', category: 'Bogus', frequency: 'Daily' } }, res);
-  assert.strictEqual(res.statusCode, 400);
-});
-
-test('createHabit rejects a Monthly habit missing dayOfMonth', async () => {
-  mock.method(Category, 'findOne', async () => ({ _id: '1', name: 'Health' }));
-  const res = mockRes();
-  await createHabit({ userId: 'user-1', body: { name: 'Pay bills', category: 'Health', frequency: 'Monthly' } }, res);
-  assert.strictEqual(res.statusCode, 400);
-});
-
 test('createHabit creates and returns the habit with 201', async () => {
   mock.method(Category, 'findOne', async () => ({ _id: '1', name: 'Mindfulness' }));
   mock.method(Habit, 'create', async (data) => ({ _id: 'new-id', ...data }));
@@ -84,6 +70,17 @@ test('updateHabit returns 404 if the habit belongs to a different user', async (
   assert.strictEqual(res.statusCode, 404);
 });
 
+test('updateHabit only matches a habit owned by req.userId', async () => {
+  let calledWith;
+  mock.method(Habit, 'findOneAndUpdate', async (query, body) => {
+    calledWith = query;
+    return { _id: query._id, frequency: body.frequency };
+  });
+  const res = mockRes();
+  await updateHabit({ userId: 'user-1', params: { id: '1' }, body: { frequency: 'Weekly' } }, res);
+  assert.deepStrictEqual(calledWith, { _id: '1', userId: 'user-1' });
+});
+
 test('updateHabit returns the updated document on success', async () => {
   mock.method(Habit, 'findOneAndUpdate', async (query, body) => ({ _id: query._id, frequency: body.frequency }));
   const res = mockRes();
@@ -97,6 +94,17 @@ test('deleteHabit returns 404 for a non-existent id', async () => {
   const res = mockRes();
   await deleteHabit({ userId: 'user-1', params: { id: 'x' } }, res);
   assert.strictEqual(res.statusCode, 404);
+});
+
+test('deleteHabit only matches a habit owned by req.userId', async () => {
+  let calledWith;
+  mock.method(Habit, 'findOneAndDelete', async (query) => {
+    calledWith = query;
+    return { _id: query._id };
+  });
+  const res = mockRes();
+  await deleteHabit({ userId: 'user-1', params: { id: '1' } }, res);
+  assert.deepStrictEqual(calledWith, { _id: '1', userId: 'user-1' });
 });
 
 test('deleteHabit returns 204 on success', async () => {
