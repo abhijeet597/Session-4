@@ -155,6 +155,11 @@ async function updateHabit(id, frequency) {
     const data = await res.json();
     throw new Error(data.error || 'Failed to update habit');
   }
+  
+  //const d = await res.json();
+
+  //console.log(d.frequency);
+  
 
   return res.json();
 }
