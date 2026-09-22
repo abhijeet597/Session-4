@@ -14,68 +14,86 @@
 
   <main class="app-main">
 
-    <div class="forms-row">
-      <div class="card form-section">
-        <p class="section-title">Add Habit</p>
-        <form id="add-habit-form">
-          <input type="text" id="name" placeholder="Habit name" required>
+    <div class="card form-section">
+      <div class="form-section-header">
+        <div class="form-section-icon">＋</div>
+        <div>
+          <p class="section-title">Add Habit</p>
+          <p class="section-subtitle">Track a new habit to build consistency</p>
+        </div>
+      </div>
 
+      <form id="add-habit-form" class="habit-form-grid">
+        <div class="form-field">
+          <label for="name" class="form-label">Habit Name</label>
+          <input type="text" id="name" placeholder="e.g. Morning run, Read 20 mins…" required>
+        </div>
+
+        <div class="form-field">
+          <label for="category" class="form-label">Category</label>
           <!-- Categories fix: was a hardcoded list of <option>s, now filled by JS from /api/categories -->
           <select id="category" required></select>
+        </div>
 
+        <div class="form-field">
+          <label for="frequency" class="form-label">Frequency</label>
           <select id="frequency" required>
             <option value="Daily">Daily</option>
             <option value="Weekly">Weekly</option>
             <option value="Monthly">Monthly</option>
           </select>
+        </div>
 
-          <input type="number" id="day-of-month" placeholder="Day of month (1-31)" min="1" max="31" hidden>
+        <div class="form-field form-field--day-of-month" id="day-of-month-field" hidden>
+          <label for="day-of-month" class="form-label">Day of Month</label>
+          <input type="number" id="day-of-month" placeholder="1 – 31" min="1" max="31">
+        </div>
 
-          <button type="submit">Add Habit</button>
-        </form>
-      </div>
+        <div class="form-field form-field--submit">
+          <button type="submit" class="btn-add-habit">Add Habit</button>
+        </div>
+      </form>
 
-      <!-- Categories fix: new form so users can actually add categories to the database -->
-      <div class="card form-section">
-        <p class="section-title">Add Category</p>
-        <form id="add-category-form">
-          <input type="text" id="category-name" placeholder="New category" required>
-          <button type="submit">Add Category</button>
+      <div class="add-category-row">
+        <span class="add-category-label">Add Category</span>
+        <form id="add-category-form" class="add-category-form">
+          <input type="text" id="category-name" placeholder="Category name" required>
+          <button type="submit">Add</button>
         </form>
       </div>
     </div>
 
-    <div class="card controls-bar">
-      <div class="controls-group">
-        <span class="controls-label">Sort by</span>
-        <div id="sort-controls" style="display:flex;gap:0.5rem;align-items:center;">
-          <select id="sort-field">
-            <option value="name">Name</option>
-            <option value="category">Category</option>
-            <option value="frequency">Frequency</option>
-            <option value="checkins">Check-ins</option>
-          </select>
+    <div class="table-section">
+    <div class="toolbar-bar">
 
-          <select id="sort-dir">
-            <option value="asc">Ascending</option>
-            <option value="desc">Descending</option>
-          </select>
+      <div class="toolbar-chip-group" id="sort-controls">
+        <span class="toolbar-chip-label">Sort by</span>
+        <select id="sort-field" class="toolbar-select">
+          <option value="name">Name</option>
+          <option value="category">Category</option>
+          <option value="frequency">Frequency</option>
+          <option value="checkins">Check-ins</option>
+        </select>
+        <select id="sort-dir" class="toolbar-select toolbar-select--dir">
+          <option value="asc">↑ Asc</option>
+          <option value="desc">↓ Desc</option>
+        </select>
+      </div>
+
+      <div class="toolbar-sep"></div>
+
+      <div class="toolbar-chip-group" id="filter-controls">
+        <span class="toolbar-chip-label">Filter</span>
+        <select id="filter-category" class="toolbar-select"></select>
+        <div class="date-range">
+          <input type="date" id="filter-date-from" class="toolbar-date" title="From date">
+          <span class="date-range-arrow">→</span>
+          <input type="date" id="filter-date-to" class="toolbar-date" title="To date">
         </div>
       </div>
 
-      <div class="controls-divider"></div>
+      <button type="button" id="clear-filters" class="toolbar-clear-btn">✕ Clear</button>
 
-      <div class="controls-group" id="filter-controls">
-        <span class="controls-label">Filter</span>
-
-        <!-- Categories fix: was a hardcoded list of <option>s, now filled by JS from /api/categories -->
-        <select id="filter-category"></select>
-
-        <input type="date" id="filter-date-from">
-        <input type="date" id="filter-date-to">
-
-        <button type="button" id="clear-filters">Clear Filters</button>
-      </div>
     </div>
 
     <table id="habit-table">
@@ -91,6 +109,7 @@
 
       <tbody id="habit-list-body"></tbody>
     </table>
+    </div>
 
   </main>
 
