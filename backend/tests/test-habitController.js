@@ -47,6 +47,14 @@ test('createHabit creates and returns the habit with 201', async () => {
   assert.strictEqual(res.statusCode, 201);
 });
 
+test('createHabit accepts a Weekly habit with dayOfWeek 0 (Sunday)', async () => {
+  mock.method(Category, 'findOne', async () => ({ _id: '1', name: 'Health' }));
+  mock.method(Habit, 'create', async (data) => ({ _id: 'new-id', ...data }));
+  const res = mockRes();
+  await createHabit({ userId: 'user-1', body: { name: 'Rest day', category: 'Health', frequency: 'Weekly', dayOfWeek: 0 } }, res);
+  assert.strictEqual(res.statusCode, 201);
+});
+
 test('createHabit attaches req.userId to the new habit', async () => {
   mock.method(Category, 'findOne', async () => ({ _id: '1', name: 'Mindfulness' }));
   let calledWith;

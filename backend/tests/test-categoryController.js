@@ -24,6 +24,14 @@ test('getCategories returns all categories', async () => {
   assert.strictEqual(res.body.length, 1);
 });
 
+test('getCategories queries with no filter — categories are shared across all users', async () => {
+  let calledWith;
+  mock.method(Category, 'find', async (query) => { calledWith = query; return []; });
+  const res = mockRes();
+  await getCategories({ userId: 'user-1' }, res);
+  assert.strictEqual(calledWith, undefined);
+});
+
 test('createCategory rejects a request with no name', async () => {
   const res = mockRes();
   await createCategory({ body: {} }, res);

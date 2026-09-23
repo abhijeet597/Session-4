@@ -7,9 +7,12 @@ async function getHabits(req, res) {
 }
 
 async function createHabit(req, res) {
-  const { name, category, frequency, dayOfMonth } = req.body;
+  const { name, category, frequency, dayOfMonth, dayOfWeek } = req.body;
   if (!name || !category || !frequency) {
     return res.status(400).json({ error: 'name, category, and frequency are all required' });
+  }
+  if (frequency === 'Weekly' && dayOfWeek === undefined) {
+    return res.status(400).json({ error: 'dayOfWeek (0-6) is required for a Weekly habit' });
   }
   if (frequency === 'Monthly' && !(dayOfMonth >= 1 && dayOfMonth <= 31)) {
     return res.status(400).json({ error: 'dayOfMonth (1-31) is required for a Monthly habit' });
