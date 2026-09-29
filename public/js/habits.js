@@ -97,7 +97,7 @@ async function getHabits() {
   return data;
 }
 
-async function addHabit(name, category, frequency, dayOfMonth) {
+async function addHabit(name, category, frequency, dayOfMonth, dayOfWeek) {
   const res = await fetch(API_BASE, {
     method: 'POST',
     headers: authHeaders({
@@ -108,9 +108,17 @@ async function addHabit(name, category, frequency, dayOfMonth) {
       category,
       frequency,
       dayOfMonth,
+      dayOfWeek,
     }),
   });
 
+  return res.json();
+}
+
+async function getDashboard() {
+  const res = await fetch('/api/dashboard', {
+    headers: authHeaders(),
+  });
   return res.json();
 }
 

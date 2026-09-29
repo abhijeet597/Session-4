@@ -64,6 +64,18 @@ test('createHabit attaches req.userId to the new habit', async () => {
   assert.strictEqual(calledWith.userId, 'user-1');
 });
 
+test('updateHabit passes req.body through to the database unchanged', async () => {
+  let bodyPassedToDb;
+  mock.method(Habit, 'findOneAndUpdate', async (query, body) => {
+    bodyPassedToDb = body;
+    return { _id: query._id, ...body };
+  });
+  const res = mockRes();
+  const updates = { frequency: 'Weekly', name: 'New name' };
+  await updateHabit({ userId: 'user-1', params: { id: '1' }, body: updates }, res);
+  assert.deepStrictEqual(bodyPassedToDb, updates);
+});
+
 test('updateHabit returns 404 for a non-existent id', async () => {
   mock.method(Habit, 'findOneAndUpdate', async () => null);
   const res = mockRes();

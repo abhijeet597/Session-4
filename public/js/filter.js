@@ -6,8 +6,11 @@ function filterHabits(habits, category, dateFrom, dateTo) {
     let afterFrom = true;
     let beforeTo = true;
     try {
-      afterFrom = !dateFrom || habit.createdDate.getTime() >= dateFrom.getTime();
-      beforeTo = !dateTo || habit.createdDate.getTime() <= dateTo.getTime();
+      const createdDate = habit.createdDate instanceof Date
+        ? habit.createdDate
+        : new Date(habit.createdDate);
+      afterFrom = !dateFrom || createdDate.getTime() >= dateFrom.getTime();
+      beforeTo = !dateTo || createdDate.getTime() <= dateTo.getTime();
     } catch (e) {
       afterFrom = false;
       beforeTo = false;

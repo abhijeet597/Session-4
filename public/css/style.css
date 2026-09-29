@@ -266,6 +266,71 @@ form {
   flex-wrap: wrap;
 }
 
+/* ---------- Dashboard ---------- */
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.stat-card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+  padding: 1.25rem 1.5rem;
+  transition: box-shadow var(--transition-fast);
+}
+
+.stat-card:hover {
+  box-shadow: var(--shadow-card-hover);
+}
+
+.stat-label {
+  display: block;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--color-text-muted);
+  margin-bottom: 0.5rem;
+}
+
+.stat-value {
+  display: block;
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--color-accent);
+  line-height: 1;
+  margin-bottom: 0.25rem;
+}
+
+.stat-unit {
+  display: block;
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+}
+
+.stat-category-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  margin-top: 0.1rem;
+}
+
+.stat-category-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.875rem;
+}
+
+.stat-category-count {
+  font-weight: 700;
+  color: var(--color-accent);
+}
+
 /* ---------- Table section (toolbar + table as one unit) ---------- */
 .table-section {
   border-radius: var(--radius-lg);
@@ -772,6 +837,10 @@ th.sortable::after {
 
   .form-section {
     padding: 1.1rem 1rem 1rem;
+  }
+
+  .dashboard-grid {
+    grid-template-columns: repeat(2, 1fr);
   }
 
   .habit-form-grid {

@@ -6,6 +6,7 @@ const habitSchema = new mongoose.Schema({
   category: { type: String, required: true },
   frequency: { type: String, required: true, enum: ['Daily', 'Weekly', 'Monthly'] },
   dayOfMonth: { type: Number, min: 1, max: 31 },
+  dayOfWeek: { type: Number, min: 0, max: 6 },
   createdDate: { type: String, required: true },
   completedDates: { type: [String], default: [] },
 });

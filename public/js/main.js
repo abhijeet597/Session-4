@@ -15,6 +15,31 @@ async function refreshCategoryOptions() {
   renderCategoryOptions(document.getElementById('filter-category'), categories, { includeAllOption: true });
 }
 
+async function refreshDashboard() {
+  const data = await getDashboard();
+
+  document.getElementById('dash-current-streak').textContent = data.currentStreak ?? '—';
+  document.getElementById('dash-longest-streak').textContent = data.longestStreak ?? '—';
+
+  const rate = data.thisWeekCompletionRate;
+  document.getElementById('dash-week-rate').textContent =
+    rate != null ? Math.round(rate * 100) + '%' : '—';
+
+  const byCategory = document.getElementById('dash-by-category');
+  byCategory.innerHTML = '';
+  const entries = Object.entries(data.completionsByCategory || {});
+  if (entries.length === 0) {
+    byCategory.textContent = '—';
+  } else {
+    entries.forEach(([cat, count]) => {
+      const row = document.createElement('div');
+      row.className = 'stat-category-row';
+      row.innerHTML = `<span>${cat}</span><span class="stat-category-count">${count}</span>`;
+      byCategory.appendChild(row);
+    });
+  }
+}
+
 async function initApp() {
   const initialSort = loadSort();
   document.getElementById('sort-field').value = initialSort.field;
@@ -23,6 +48,7 @@ async function initApp() {
   // Categories fix: populate dropdowns before rendering habits.
   await refreshCategoryOptions();
   await applyFilters();
+  await refreshDashboard();
 }
 
 const DEFAULT_SORT = {
@@ -98,11 +124,12 @@ async function renderSorted() {
   renderHabitList(sortHabits(habits, field, dir));
 }
 
-// Show the day-of-month field only for Monthly habits.
+// Show the day-of-week or day-of-month field depending on frequency.
 document
   .getElementById('frequency')
   .addEventListener('change', (e) => {
-    document.getElementById('day-of-month').hidden = e.target.value !== 'Monthly';
+    document.getElementById('day-of-week-field').hidden = e.target.value !== 'Weekly';
+    document.getElementById('day-of-month-field').hidden = e.target.value !== 'Monthly';
   });
 
 // Add habbit
@@ -114,16 +141,21 @@ document
     const name = document.getElementById('name').value;
     const category = document.getElementById('category').value;
     const frequency = document.getElementById('frequency').value;
+    const dayOfWeek = frequency === 'Weekly'
+      ? Number(document.getElementById('day-of-week').value)
+      : undefined;
     const dayOfMonth = frequency === 'Monthly'
       ? Number(document.getElementById('day-of-month').value)
       : undefined;
 
-    await addHabit(name, category, frequency, dayOfMonth);
+    await addHabit(name, category, frequency, dayOfMonth, dayOfWeek);
 
     e.target.reset();
-    document.getElementById('day-of-month').hidden = true;
+    document.getElementById('day-of-week-field').hidden = true;
+    document.getElementById('day-of-month-field').hidden = true;
 
     await applyFilters();
+    await refreshDashboard();
   });
 
 FILTER_IDS.forEach((id) => {
@@ -203,9 +235,10 @@ document
 
     if (!btn) return;
 
-    checkInHabit(btn.dataset.id);
+    await checkInHabit(btn.dataset.id);
 
     await renderSorted();
+    await refreshDashboard();
   });
 
 // Clicking the check-ins header switches to check-in sorting.
